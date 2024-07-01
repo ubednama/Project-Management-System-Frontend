@@ -10,7 +10,7 @@ export const sendMessage = (messageData) => {
             console.log("all messages ",data)
         } catch (error) {
             console.log(error)
-            dispatch({type: actionTypes.SEND_MESSAGE_FAILURE, message: error})
+            dispatch({type: actionTypes.SEND_MESSAGE_FAILURE, error: error.message})
         }
     }
 }
@@ -33,7 +33,7 @@ export const fetchChatMessages = ({projectId, chatId}) => {
     async (dispatch) => {
         dispatch({ type: actionTypes.FETCH_CHAT_MESSAGES_REQUEST })
         try {
-            const { data } = await api.get(`/api/project/${projectId}/chat/${chatId}`);
+            const { data } = await api.get(`/api/messages/chat/${chatId}`);
             dispatch({ type: actionTypes.FETCH_CHAT_MESSAGES_SUCCESS, chatId, messages: data })
             console.log("message by chat ", data)
         } catch (error) {

@@ -1,44 +1,44 @@
 import api from "@/config/api";
 import * as actionTypes from "./ActionTypes"
 
-export const createComment = (messageData) => {
+export const addComment = (commentData) => {
     async(dispatch) => {
-        dispatch({type: actionTypes.SEND_MESSAGE_REQUEST})
+        dispatch({type: actionTypes.ADD_COMMENT_REQUEST})
         try {
-            const response = await api.post(`/api/messages/send/`, messageData);
-            dispatch({type: actionTypes.SEND_MESSAGE_SUCCESS, message: response.data})
-            console.log("all messages ",data)
+            const {data} = await api.post(`/api/comments/`, commentData);
+            dispatch({type: actionTypes.ADD_COMMENT_SUCCESS, comment: data})
+            console.log("comment created ", data)
         } catch (error) {
             console.log(error)
-            dispatch({type: actionTypes.SEND_MESSAGE_FAILURE, message: error})
+            dispatch({type: actionTypes.ADD_COMMENT_FAILURE, error: error.message})
         }
     }
 }
 
-export const fetchChatByProject = (id) => {
+export const deleteComment = (id) => {
     async (dispatch) => {
-        dispatch({ type: actionTypes.FETCH_CHAT_BY_PROJECT_REQUEST })
+        dispatch({ type: actionTypes.DELETE_COMMENT_REQUEST })
         try {
-            const { data } = await api.get(`/api/project/${id}/chat`);
-            dispatch({ type: actionTypes.FETCH_CHAT_BY_PROJECT_SUCCESS, chat: data })
-            console.log("message by chat ", data)
+            const { data } = await api.delete(`/api/comments/`);
+            dispatch({ type: actionTypes.DELETE_COMMENT_SUCCESS, comment: id })
+            console.log("comment by chat ", data)
         } catch (error) {
             console.log(error)
-            dispatch({ type: actionTypes.FETCH_CHAT_BY_PROJECT_FAILURE, error: error.message })
+            dispatch({ type: actionTypes.DELETE_COMMENT_FAILURE, error: error.message })
         }
     }
 }
 
-export const fetchChatMessages = ({projectId, chatId}) => {
+export const fetchComments = (issueId) => {
     async (dispatch) => {
-        dispatch({ type: actionTypes.FETCH_CHAT_MESSAGES_REQUEST })
+        dispatch({ type: actionTypes.FETCH_COMMENTS_REQUEST })
         try {
-            const { data } = await api.get(`/api/project/${projectId}/chat/${chatId}`);
-            dispatch({ type: actionTypes.FETCH_CHAT_MESSAGES_SUCCESS, chatId, messages: data })
-            console.log("message by chat ", data)
+            const { data } = await api.get(`/api/comments/${issueId}`);
+            dispatch({ type: actionTypes.FETCH_COMMENTS_SUCCESS, issueId, comments: data })
+            console.log("comment by chat ", data)
         } catch (error) {
             console.log(error)
-            dispatch({ type: actionTypes.FETCH_CHAT_MESSAGES_FAILURE, error: error.message })
+            dispatch({ type: actionTypes.FETCH_COMMENTS_FAILURE, error: error.message })
         }
     }
 }
