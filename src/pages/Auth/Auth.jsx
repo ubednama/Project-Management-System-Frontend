@@ -9,6 +9,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 
 const Auth = () => {
   const [active, setActive] = useState(true);
@@ -21,6 +22,7 @@ const Auth = () => {
     },
   });
 
+  const navigate = useNavigate();
   return (
     <div className="font-poppins font-sans flex flex-col justify-center items-center min-h-screen sm:bg-[#131313]">
       <h1 className="text-white font-semibold text-xl sm:text-5xl mb-20 !font-poppins">
@@ -134,7 +136,7 @@ const Auth = () => {
               </div>
               <div className="">
                 <span className="text-sm">Wanna read terms & conditions??</span>
-                <Button variant="ghost" size="">
+                <Button variant="ghost" size="" onClick={()=>navigate("/terms-and-condition")}>
                   go here
                 </Button>
               </div>
