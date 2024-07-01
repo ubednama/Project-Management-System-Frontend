@@ -1,5 +1,5 @@
 import { API_BASE_URL } from "@/config/api";
-import { GET_USER_REQUEST, LOGIN_REQUEST, LOGOUT_REQUEST, SIGNUP_SUCCESS } from "./ActionTypes"
+import * as actionTypes from "./ActionTypes"
 import axios from "axios";
 
 export const signup = userData => {
@@ -20,12 +20,12 @@ export const signup = userData => {
 
 export const login = userData => {
     async (dispatch) => {
-        dispatch({ type: LOGIN_REQUEST })
+        dispatch({ type: actionTypes.LOGIN_REQUEST })
         try {
             const { data } = await axios.post(`${API_BASE_URL}/auth/login`, userData);
             if (data.jwt) {
                 localStorage.setItem("jwt", data.jwt);
-                dispatch({ type: LOGIN_SUCCESS, payload: data })
+                dispatch({ type: actionTypes.LOGIN_SUCCESS, payload: data })
             }
             console.log(data)
         } catch (error) {
@@ -36,7 +36,7 @@ export const login = userData => {
 
 export const getUser = () => {
     async (dispatch) => {
-        dispatch({ type: GET_USER_REQUEST })
+        dispatch({ type: actionTypes.GET_USER_REQUEST })
         try {
             const { data } = await axios.get(`${API_BASE_URL}/api/user/profile`, {
                 headers:{
@@ -45,7 +45,7 @@ export const getUser = () => {
             });
             if (data.jwt) {
                 localStorage.setItem("jwt", data.jwt);
-                dispatch({ type: GET_USER_SUCCESS, payload: data })
+                dispatch({ type: actionTypes.GET_USER_SUCCESS, payload: data })
             }
             console.log(data)
         } catch (error) {
@@ -55,6 +55,6 @@ export const getUser = () => {
 }
 
 export const logout = () => async(dispatch) => {
-    dispatch({ type: LOGOUT_REQUEST })
+    dispatch({ type: actionTypes.LOGOUT_REQUEST })
     localStorage.clear();
 }
