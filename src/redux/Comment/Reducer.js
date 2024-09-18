@@ -23,6 +23,6 @@ export const commentReducer = (state = initialState, action) => {
         case actionTypes.FETCH_COMMENTS_FAILURE:
             return { ...state, loading: false, error: null, error: action.error }
         default:
-            state
+            return state
     }
 }

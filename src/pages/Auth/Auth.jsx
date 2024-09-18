@@ -10,8 +10,11 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import { login, signup } from "@/redux/Auth/Action";
+import { useDispatch } from "react-redux";
 
 const Auth = () => {
+  const dispatch = useDispatch();
   const [active, setActive] = useState(true);
   const form = useForm({
     defaultValues: {
@@ -21,6 +24,11 @@ const Auth = () => {
       confirmPassword: "",
     },
   });
+
+  const onSubmit = (data) => {
+    console.log(data);
+    active ? dispatch(signup(data)) : dispatch(login(data))
+  };
 
   const navigate = useNavigate();
   return (
@@ -40,7 +48,10 @@ const Auth = () => {
                 {active ? "Sign Up" : "Login"}
               </h1>
               <Form {...form}>
-                <form className="space-y-2 flex flex-col items-center">
+                <form
+                  className="space-y-2 flex flex-col items-center"
+                  onSubmit={form.handleSubmit(onSubmit)}
+                >
                   {active && (
                     <FormField
                       control={form.control}
@@ -113,15 +124,17 @@ const Auth = () => {
                       )}
                     />
                   )}
+                  <div>
+
+                  <Button
+                    type="submit"
+                    className="mt-4"
+                    >
+                    {active ? "Sign Up" : "Login"}
+                  </Button>
+                  </div>
                 </form>
               </Form>
-              <Button
-                type="submit"
-                className="mt-4"
-                onClick={() => console.log("hey")}
-              >
-                {active ? "Sign Up" : "Login"}
-              </Button>
             </div>
             <div>
               <div className="">
@@ -136,7 +149,11 @@ const Auth = () => {
               </div>
               <div className="">
                 <span className="text-sm">Wanna read terms & conditions??</span>
-                <Button variant="ghost" size="" onClick={()=>navigate("/terms-and-condition")}>
+                <Button
+                  variant="ghost"
+                  size=""
+                  onClick={() => navigate("/terms-and-condition")}
+                >
                   go here
                 </Button>
               </div>

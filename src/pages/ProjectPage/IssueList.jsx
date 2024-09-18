@@ -16,8 +16,11 @@ import { Button } from "@/components/ui/button";
 import IssueCard from "./IssueCard";
 import { PlusIcon } from "@radix-ui/react-icons";
 import CreateIssueForm from "./CreateIssueForm";
+import { useParams } from "react-router-dom";
 
-const IssueList = ({title, status}) => {
+const IssueList = ({ title, status, issues}) => {
+  const {id} = useParams();
+
   return (
     <div className="w-full mt-2 sm:mt-0 min-w-80">
       <Dialog>
@@ -25,29 +28,31 @@ const IssueList = ({title, status}) => {
           <CardHeader>
             <CardTitle>{title}</CardTitle>
           </CardHeader>
-          <CardContent className="px-2">
+          <CardContent className="!pb-2 px-2">
             <div className="space-y-1">
-              {[1, 2, 3, 4].map(() => (
-                <IssueCard />
+              {issues?.map((issue) => (
+                <IssueCard key={issue.id} issue={issue} projectId={id} />
               ))}
             </div>
           </CardContent>
-          <CardFooter>
-            <DialogTrigger>
-              <Button
-                variant="outline"
-                className="w-full flex items-center gap-2"
-              >
-                <PlusIcon /> Create Issue
-              </Button>
-            </DialogTrigger>
-          </CardFooter>
+          {status == "pending" && (
+            <CardFooter className="!pt-4">
+              <DialogTrigger>
+                <Button
+                  variant="outline"
+                  className="w-full flex items-center gap-2"
+                >
+                  <PlusIcon /> Create Issue
+                </Button>
+              </DialogTrigger>
+            </CardFooter>
+          )}
         </Card>
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Create New Issue</DialogTitle>
           </DialogHeader>
-          <CreateIssueForm />
+          <CreateIssueForm status={status} />
         </DialogContent>
       </Dialog>
     </div>

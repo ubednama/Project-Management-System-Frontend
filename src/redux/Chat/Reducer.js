@@ -25,6 +25,6 @@ export const chatReducer = (state = initialState, action) => {
         case actionTypes.FETCH_CHAT_MESSAGES_FAILURE:
             return { ...state, loading: false, error: null, error: action.error }
         default:
-            state
+            return state
     }
 }

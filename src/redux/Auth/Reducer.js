@@ -20,12 +20,12 @@ export const authReducer = (state=initialState, action) => {
             return {...state, loading: false, error: null, jwt: action.payload.jwt}
         
         case actionTypes.GET_USER_SUCCESS:
-            return { ...state, loading: false, error: null, jwt: action.payload }
+            return { ...state, loading: false, error: null, user: action.payload }
 
         case actionTypes.LOGOUT_SUCCESS:
-            return initialState
+            return initialState;
 
         default:
-            state;
+            return state;
     }
 }

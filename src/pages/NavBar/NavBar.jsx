@@ -14,9 +14,17 @@ import {
   DropdownMenuContent,
 } from "@/components/ui/dropdown-menu";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "@/redux/Auth/Action";
 
 const NavBar = () => {
+  const {auth} = useSelector((store) => store)
   const navigate = useNavigate()
+  const dispatch = useDispatch();
+
+  const handleLogout = () => {
+    dispatch(logout())
+  }
   return (
     <div className="border-b py-4 px-2 sm:px-5 flex items-center justify-between gap-2">
       <div className="flex items-center gap-1 sm:gap-3">
@@ -36,22 +44,21 @@ const NavBar = () => {
             <CreateProjectForm />
           </DialogContent>
         </Dialog>
-        <Button variant="secondary" onClick={()=>navigate("/upgrade")}>Upgrade</Button>
+        <Button variant="secondary" className='bg-blue-500' onClick={()=>navigate("/upgrade")}>Upgrade</Button>
       </div>
 
       <div className="flex gap-3 items-center">
         <DropdownMenu>
           <DropdownMenuTrigger>
-            <Button variant="primary" className="rounded-full" size="icon">
+            <Button variant="secondary" className="rounded-full" size="icon">
               <PersonIcon className="size-5" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
-            <DropdownMenuItem>Logout</DropdownMenuItem>
-            <DropdownMenuItem>Sign-out</DropdownMenuItem>
+            <DropdownMenuItem onClick={handleLogout}>Logout</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-        <p className="hidden sm:block">ubednama</p>
+        <p className="hidden sm:block">{auth.user.fullName}</p>
       </div>
     </div>
   );

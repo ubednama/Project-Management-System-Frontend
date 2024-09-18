@@ -1,30 +1,55 @@
 import { Card, CardContent } from "@/components/ui/card";
-import { Button } from '@/components/ui/button'
-import { MagnifyingGlassIcon, MixerHorizontalIcon } from '@radix-ui/react-icons'
+import { Button } from "@/components/ui/button";
+import {
+  MagnifyingGlassIcon,
+  MixerHorizontalIcon,
+} from "@radix-ui/react-icons";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import ProjectCard from '../Project/ProjectCard';
-import { category, tags } from '../../utils/Constants';
-import { capitalizeFirstLetter } from '../../utils/Capitalize';
+import ProjectCard from "../Project/ProjectCard";
+import { category, tags } from "../../utils/Constants";
+import { capitalizeFirstLetter } from "../../utils/Capitalize";
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchProjects, searchProjects } from "@/redux/Project/Action";
 
 const ProjectList = () => {
+  const [keyword, setKeyword] = useState("");
 
-    const [keyword, setKeyword] = useState("");
+  const { project } = useSelector((store) => store);
+  const dispatch = useDispatch();
 
-    const handleFilterChange = (section, val) => {
-        console.log("value: ", val, section)
+  const handleFilterCategoryChange = (value) => {
+    console.log("category: ", value);
+    if(value === "all"){
+      dispatch(fetchProjects({category: []}));
+      return;
     }
+    dispatch(fetchProjects({category: value}));
+  };
 
-    const handleSearchChange = (e) => {
-        setKeyword(e.target.value);
+  const handleFilterTagChange = (value) => {
+    console.log("tag:" , value);
+    if (value === "all") {
+      dispatch(fetchProjects({tags: [] }));
+      return;
     }
+    dispatch(fetchProjects({tags: value}));
+  };
+
+  console.log(project);
+
+  const handleSearchChange = (e) => {
+    setKeyword(e.target.value);
+    dispatch(searchProjects(e.target.value));
+  };
+
   return (
-    <div className="relative px-5 lg:px-0 lg:flex gap-5 justify-center py-5">
-      <section className="filterSection">
-        <Card className="p-5 sticky top-10">
+    <div className="relative px-5 lg:px-0 lg:flex gap-2 xl:gap-5 justify-center pt-5">
+      <section className="filterSection h-fit mb-4 lg:mb-0">
+        <Card className="p-5 !pb-0 sticky top-10">
           <div className="flex justify-between lg:w-[20rem]">
             <p className="text-xl -tracking-wider">Filters</p>
             <Button variant="ghost" size="icon">
@@ -41,7 +66,7 @@ const ProjectList = () => {
                     className="space-y-1 pt-2"
                     defaultValue="all"
                     onValueChange={(value) =>
-                      handleFilterChange("category", value)
+                      handleFilterCategoryChange(value)
                     }
                   >
                     <div className="flex items-center gap-2">
@@ -68,7 +93,9 @@ const ProjectList = () => {
                   <RadioGroup
                     className="space-y-1 pt-2"
                     defaultValue="all"
-                    onValueChange={(value) => handleFilterChange("tag", value)}
+                    onValueChange={(value) =>
+                      handleFilterTagChange(value)
+                    }
                   >
                     <div className="flex items-center gap-2">
                       <RadioGroupItem value="all" id="all" />
@@ -91,8 +118,8 @@ const ProjectList = () => {
           </CardContent>
         </Card>
       </section>
-      <section className="projectListSection w-full lg:w-[48rem]">
-        <div className="flex gap-2 items-center pb-5 justify-between">
+      <section className="projectListSection w-full lg:w-[48rem] min-h-[80vh] max-h-[90vh]">
+        <div className="flex gap-2 items-center pb-2 lg:pb-4 xl:pb-5 justify-between">
           <div className="relative p-0 w-full">
             <Input
               onChange={handleSearchChange}
@@ -103,19 +130,21 @@ const ProjectList = () => {
           </div>
         </div>
         <div>
-          <div className="space-y-5 min-h-[74vh]">
-            {keyword
-              ? [0, 1, 2].map((item, index) => (
-                  <ProjectCard key={index} project={item} />
-                ))
-              : [0, 1, 2, 3].map((item, index) => (
-                  <ProjectCard key={index} project={item} />
-                ))}
-          </div>
+          <ScrollArea className="max-h-[80vh] overflow-y-auto border rounded-xl p-2">
+            <div className="space-y-5">
+              {keyword
+                ? project.searchProjects?.map((item) => (
+                    <ProjectCard key={item.id} project={item} />
+                  ))
+                : project.projects?.map((item) => (
+                    <ProjectCard key={item.id} project={item} />
+                  ))}
+            </div>
+          </ScrollArea>
         </div>
       </section>
     </div>
   );
-}
+};
 
-export default ProjectList
+export default ProjectList;

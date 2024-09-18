@@ -20,6 +20,6 @@ export const subscriptionReducer = (state=initialState, action) => {
         case actionTypes.UPGRADE_SUBSCRIPTION_FAILURE:
             return {...state, loading: false, error: null, error: action.error}
         default:
-            state;
+            return state;
     }
 }

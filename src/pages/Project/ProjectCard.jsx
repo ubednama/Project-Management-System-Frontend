@@ -9,21 +9,37 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "../../components/ui/button";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { deleteProjectById, fetchProjectById } from "@/redux/Project/Action";
+import { capitalizeFirstLetter } from "@/utils/Capitalize";
+import { useEffect } from "react";
 
-const ProjectCard = () => {
-    const navigate = useNavigate();
+const ProjectCard = ({project}) => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const handleDelete = () => {
+    dispatch(deleteProjectById(project.id));
+    console.log("delete project");
+  };
+
   return (
-    <div onClick={() => navigate("/project/3")} className="cursor-pointer">
-      <Card className="p-5 w-full lg:max-w-3xl">
+    <div className="cursor-pointer">
+      <Card className="p-5 w-full lg:max-w-3xl ">
         <div className="space-y-5 px-2">
           <div className="space-y-2">
             <div className="flex justify-between">
               <div className="flex items-center">
-                <h1 className="cursor-pointer font-bold">
-                  Create E-commerce Website
+                <h1
+                  className="cursor-pointer font-bold"
+                  onClick={() => navigate("/project/" + project.id)}
+                >
+                  {project.name}
                 </h1>
                 <DotFilledIcon />
-                <p className="text-sm text-gray-400">Full-Stack</p>
+                <p className="text-sm text-gray-400">
+                  {capitalizeFirstLetter(project.category)}
+                </p>
               </div>
               <div>
                 <DropdownMenu>
@@ -38,21 +54,21 @@ const ProjectCard = () => {
                   </DropdownMenuTrigger>
                   <DropdownMenuContent>
                     <DropdownMenuItem>Update</DropdownMenuItem>
-                    <DropdownMenuItem>Delete</DropdownMenuItem>
+                    <DropdownMenuItem onClick={handleDelete}>
+                      Delete
+                    </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
               </div>
             </div>
             <p className="text-gray-500 text-sm text-left">
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptas
-              deserunt sequi blanditiis cupiditate provident repudiandae esse,
-              voluptatum ducimus exercitationem earum.
+              {project.description}
             </p>
           </div>
           <div className="flex flex-wrap gap-2 items-center">
-            {[1, 1, 1, 1].map((item) => (
-              <Badge key={item} variant="outline">
-                {item}
+            {project.tags.map((tag) => (
+              <Badge key={tag} variant="outline">
+                {tag}
               </Badge>
             ))}
           </div>

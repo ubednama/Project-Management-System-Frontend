@@ -7,24 +7,35 @@ import IssueDetails from './pages/IssuePage/IssueDetails';
 import Subscription from './pages/Subscription/Subscription';
 import Auth from './pages/Auth/Auth';
 import TermsAndConditions from './pages/TermsAndConditions/TermsAndConditions';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { getUser } from './redux/Auth/Action';
+import { fetchProjects } from './redux/Project/Action';
 
 function App() {
+  const dispatch = useDispatch()
+  const {auth} = useSelector((store) => store)
+
+  useEffect(() => {
+    dispatch(getUser())
+    dispatch(fetchProjects({}))
+  }, [auth.jwt])
 
   return (
     <>
-      {false ? (
-        <>
+      {auth.user ? (
+        <div className=''>
           <NavBar />
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/project/:id" element={<ProjectDetails />} />
             <Route
-              path="/project/:projectId/issue/:issueId"
+              path="/api/issues/:issueId"
               element={<IssueDetails />}
             />
             <Route path="/upgrade" element={<Subscription />} />
           </Routes>{" "}
-        </>
+        </div>
       ) : (
         <>
           <Routes>

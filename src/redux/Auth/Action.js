@@ -3,23 +3,24 @@ import * as actionTypes from "./ActionTypes"
 import axios from "axios";
 
 export const signup = userData => {
-    async(dispatch) => {
-        dispatch({type:SIGNUP_REQUEST})
+    return async(dispatch) => {
+        dispatch({type: actionTypes.SIGNUP_REQUEST})
         try {
             const {data} = await axios.post(`${API_BASE_URL}/auth/signup`, userData);
             if(data.jwt) {
                 localStorage.setItem("jwt", data.jwt);
-                dispatch({type:SIGNUP_SUCCESS, payload:data})
+                dispatch({type: actionTypes.SIGNUP_SUCCESS, payload:data})
             }
             console.log(data)
         } catch (error) {
-            console.log(error)
+            console.log("Error in signup",error)
+            dispatch({ type: actionTypes.SIGNUP_FAILURE, payload: error.message });
         }
     }
 }
 
 export const login = userData => {
-    async (dispatch) => {
+    return async (dispatch) => {
         dispatch({ type: actionTypes.LOGIN_REQUEST })
         try {
             const { data } = await axios.post(`${API_BASE_URL}/auth/login`, userData);
@@ -29,13 +30,13 @@ export const login = userData => {
             }
             console.log(data)
         } catch (error) {
-            console.log(error)
+            console.log("Error in login", error)
         }
     }
 }
 
 export const getUser = () => {
-    async (dispatch) => {
+    return async (dispatch) => {
         dispatch({ type: actionTypes.GET_USER_REQUEST })
         try {
             const { data } = await axios.get(`${API_BASE_URL}/api/user/profile`, {
@@ -43,18 +44,14 @@ export const getUser = () => {
                     Authorization: `Bearer ${localStorage.getItem("jwt")}`
                 }
             });
-            if (data.jwt) {
-                localStorage.setItem("jwt", data.jwt);
-                dispatch({ type: actionTypes.GET_USER_SUCCESS, payload: data })
-            }
-            console.log(data)
+            dispatch({ type: actionTypes.GET_USER_SUCCESS, payload: data })
         } catch (error) {
-            console.log(error)
+            console.log("Error in getUser", error)
         }
     }
 }
 
 export const logout = () => async(dispatch) => {
-    dispatch({ type: actionTypes.LOGOUT_REQUEST })
+    dispatch({ type: actionTypes.LOGOUT_SUCCESS })
     localStorage.clear();
 }

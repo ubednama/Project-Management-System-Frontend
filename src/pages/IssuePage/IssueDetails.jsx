@@ -20,26 +20,36 @@ import {
 } from "@/components/ui/select";
 import CreateCommentForm from "./CreateCommentForm";
 import CommentCard from "./CommentCard";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+import { fetchIssueById } from "@/redux/Issue/Action";
+import { useEffect } from "react";
 
 const IssueDetails = () => {
-    const handleUpdateIssueStatus =(issue) => {
-        console.log(issue)
-    }
+  const dispatch = useDispatch();
+  const {id} = useParams();
+
+  const {issue} = useSelector((store) => store);
+  const {issueDetails} = issue
+  console.log(issue, issueDetails)
+  useEffect(() => {
+    dispatch(fetchIssueById({id}))
+  }, [id])
+  const handleUpdateIssueStatus = (issue) => {
+    console.log(issue);
+  };
   return (
     <div className="px-20 py-8 text-gray-400">
       <div className="flex justify-between border p-10 rounded-lg ">
         <ScrollArea className="h-[80vh] w-[60%] ">
           <div>
             <h1 className="text-lg font-semibold text-gray-400">
-              Create Navbar
+              {issueDetails?.title}
             </h1>
             <div className="py-5">
               <h2 className="font-semibold text-gray-400">Description</h2>
               <p className="text-gray-400 text-sm">
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fugit,
-                atque! Est molestias enim quis ea voluptatum aliquam. Maxime
-                alias laborum asperiores animi ipsa voluptas saepe quos iste.
-                Necessitatibus quae saepe quod quam
+                {issueDetails?.description}
               </p>
             </div>
             <div className="mt-3">
@@ -74,7 +84,7 @@ const IssueDetails = () => {
             defaultValue="pending"
           >
             <SelectTrigger className="">
-              <SelectValue placeHolder="To Do" />
+              <SelectValue placeholder="To Do" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="pending">To Do</SelectItem>

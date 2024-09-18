@@ -2,7 +2,7 @@ import api from "@/config/api";
 import * as actionTypes from "./ActionTypes"
 
 export const addComment = (commentData) => {
-    async(dispatch) => {
+    return async(dispatch) => {
         dispatch({type: actionTypes.ADD_COMMENT_REQUEST})
         try {
             const {data} = await api.post(`/api/comments/`, commentData);
@@ -16,7 +16,7 @@ export const addComment = (commentData) => {
 }
 
 export const deleteComment = (id) => {
-    async (dispatch) => {
+    return async (dispatch) => {
         dispatch({ type: actionTypes.DELETE_COMMENT_REQUEST })
         try {
             const { data } = await api.delete(`/api/comments/`);
@@ -30,7 +30,7 @@ export const deleteComment = (id) => {
 }
 
 export const fetchComments = (issueId) => {
-    async (dispatch) => {
+    return async (dispatch) => {
         dispatch({ type: actionTypes.FETCH_COMMENTS_REQUEST })
         try {
             const { data } = await api.get(`/api/comments/${issueId}`);

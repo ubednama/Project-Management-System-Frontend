@@ -19,8 +19,8 @@ export const issueReducer = (state = initialState, action) => {
             return { ...state, loading: false, error: null, issues: action.issues }
         case actionTypes.FETCH_ISSUES_BY_ID_SUCCESS:
         case actionTypes.UPDATE_ISSUE_STATUS_SUCCESS:
-            return { ...state, loading: false, error: null, issueDetails: action.issues }
-        case actionTypes.CREATE_ISSUE_REQUEST:
+            return { ...state, loading: false, error: null, issueDetails: action.issueDetails }
+        case actionTypes.CREATE_ISSUE_SUCCESS:
             return { ...state, loading: false, error: null, issues: [...state.issues, action.issue] }
         case actionTypes.ASSIGNED_ISSUE_TO_USER_SUCCESS:
             return { ...state, loading: false, error: null, issues: state.issues.map(issue => issue.id === action.issueId ? action.issue : issue)}
@@ -33,6 +33,6 @@ export const issueReducer = (state = initialState, action) => {
         case actionTypes.ASSIGNED_ISSUE_TO_USER_FAILURE:
             return { ...state, loading: false, error: action.error }
         default:
-            state
+            return state
     }
 }

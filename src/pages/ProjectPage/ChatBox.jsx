@@ -17,7 +17,7 @@ const ChatBox = () => {
     setMessage(e.target.value);
   }
   return (
-    <div className="sticky lg:min-w-72 xl:min-w-80 max-w-96">
+    <div className="sticky lg:w-96">
       <div className="border rounded-lg">
         <h1 className="border-b p-5">Chat</h1>
         <ScrollArea className="h-[38rem] p-2 xl:pt-5">
@@ -50,7 +50,7 @@ const ChatBox = () => {
         </ScrollArea>
         <div className="relative p-0">
           <Input
-            placeHolder="Send message..."
+            placeholder="Send message..."
             className="py-7 border-t outline-none focus:outline-none focus:ring-0 rounded-none border-b-0 border-x-0"
             value={message}
             onChange={(e) => setMessage(e.target.value)}

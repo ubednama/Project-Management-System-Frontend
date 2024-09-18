@@ -2,7 +2,7 @@ import api from "@/config/api";
 import * as actionTypes from "./ActionTypes"
 
 export const sendMessage = (messageData) => {
-    async(dispatch) => {
+    return async(dispatch) => {
         dispatch({type: actionTypes.SEND_MESSAGE_REQUEST})
         try {
             const response = await api.post(`/api/messages/send/`, messageData);
@@ -16,7 +16,7 @@ export const sendMessage = (messageData) => {
 }
 
 export const fetchChatByProject = (id) => {
-    async (dispatch) => {
+    return async (dispatch) => {
         dispatch({ type: actionTypes.FETCH_CHAT_BY_PROJECT_REQUEST })
         try {
             const { data } = await api.get(`/api/project/${id}/chat`);
@@ -30,7 +30,7 @@ export const fetchChatByProject = (id) => {
 }
 
 export const fetchChatMessages = ({projectId, chatId}) => {
-    async (dispatch) => {
+    return async (dispatch) => {
         dispatch({ type: actionTypes.FETCH_CHAT_MESSAGES_REQUEST })
         try {
             const { data } = await api.get(`/api/messages/chat/${chatId}`);

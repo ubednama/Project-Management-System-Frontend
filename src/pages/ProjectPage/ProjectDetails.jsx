@@ -13,37 +13,55 @@ import {
 import InviteUserForm from "./InviteUserForm";
 import IssueList from "./IssueList";
 import ChatBox from "./ChatBox";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+import { useEffect } from "react";
+import { fetchProjectById } from "@/redux/Project/Action";
+import { capitalizeFirstLetter } from "@/utils/Capitalize";
+import { fetchIssues } from "@/redux/Issue/Action";
 
 const ProjectDetails = () => {
+  const dispatch = useDispatch();
+  const { project, issue } = useSelector((store) => store);
+  const { id } = useParams();
   const handleProjectInvitation = () => {
-    console.log("hey")
-  }
+    console.log("hey");
+  };
+
+  const {issues} = issue;
+  const filteredIssues = (status) => issues.filter(issue => issue.status === status);
+
+  useEffect(() => {
+    dispatch(fetchProjectById(id));
+  }, [id]);
+
+  useEffect(() => {
+    dispatch(fetchIssues(id));
+  }, [id]);
 
   return (
     <div className="mt-5 px-4 lg:px-10 ">
-      <div className="md:flex gap-5 justify-between pb-4 ">
-        <ScrollArea className="h-screen max-w-[60%] pr-2">
+      <div className="md:flex gap-2 justify-between pb-4 ">
+        <ScrollArea className="h-screen min-w-[60%] w-full pr-2">
           <div className="text-gray-400 pb-10 w-full">
-            <h1 className="text-lg font-semibold pb-5">
-              Create E-commerce Website
+            <h1 className="text-2xl font-semibold pb-1">
+              {project?.projectDetails?.name}
             </h1>
-            <div className=" space-y-5 pb-10">
-              <p className="w-full md:max-w-lg lg:max-w-xl">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Magni
-                placeat qui quidem culpa eaque voluptas, corporis ut rem fugit
-                illum dolore amet sed minus similique assumenda, neque dolorum,
-                non dicta?
+            <div className=" space-y-3 pb-10">
+              <p className="w-full md:max-w-lg lg:max-w-xl mb-5">
+                {project?.projectDetails?.description}
               </p>
+
               <div className="flex">
                 <p className="w-28 sm:w-36">Project Lead: </p>
-                <p>Ubednama</p>
+                <Badge>{project?.projectDetails?.owner.fullName}</Badge>
               </div>
               <div className="flex items-center">
                 <p className="w-28 sm:w-36">Members: </p>
                 <div className="flex items-center gap-2 max-w-[50%] overflow-auto">
-                  {[1, 1, 1, 1].map((item) => (
-                    <Avatar className="cursor-pointer" key={item}>
-                      <AvatarFallback>{item}</AvatarFallback>
+                  {project?.projectDetails?.team.map((item) => (
+                    <Avatar className="cursor-pointer" key={item.id}>
+                      <AvatarFallback>{item.fullName[0]}</AvatarFallback>
                     </Avatar>
                   ))}
                 </div>
@@ -69,11 +87,9 @@ const ProjectDetails = () => {
               </div>
               <div className="flex">
                 <p className="w-28 sm:w-36">Category: </p>
-                <p>FullStack</p>
-              </div>
-              <div className="flex">
-                <p className="w-28 sm:w-36">Project Lead: </p>
-                <Badge>Ubed</Badge>
+                <p>
+                  {capitalizeFirstLetter(project?.projectDetails?.category)}
+                </p>
               </div>
               <div className="flex">
                 <p className="w-28 sm:w-36">Status: </p>
@@ -83,20 +99,31 @@ const ProjectDetails = () => {
             <section>
               <p className="sm:py-5 border-b text-lg -tracking-wider">Tasks</p>
               <div className="py-5 md:flex gap-3 justify-between">
-                <IssueList status="pending" title="ToDo list" />
-                <IssueList status="in_progress" title="In Progress" />
-                <IssueList status="done" title="Done" />
-                {/* <IssueList status="pending" title="ToDo list" /> */}
+                <IssueList
+                  status="pending"
+                  title="ToDo list"
+                  issues={filteredIssues("pending")}
+                />
+                <IssueList
+                  status="in_progress"
+                  title="In Progress"
+                  issues={filteredIssues("in_progress")}
+                />
+                <IssueList
+                  status="done"
+                  title="Done"
+                  issues={filteredIssues("done")}
+                />
               </div>
             </section>
           </div>
         </ScrollArea>
-        <div className="">
+        <div className="max-w-[35%]">
           <ChatBox />
         </div>
       </div>
     </div>
   );
-}
+};
 
-export default ProjectDetails
+export default ProjectDetails;
