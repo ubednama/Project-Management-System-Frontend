@@ -24,20 +24,24 @@ const ProjectDetails = () => {
   const dispatch = useDispatch();
   const { project, issue } = useSelector((store) => store);
   const { id } = useParams();
+
   const handleProjectInvitation = () => {
-    console.log("hey");
+    console.log("handleProjectInvitation not implemented yet");
   };
 
-  const {issues} = issue;
-  const filteredIssues = (status) => issues.filter(issue => issue.status === status);
+  const { issues } = issue;
+
+  const filteredIssues = (status) => {
+    return issues.filter((issue) => issue.status === status);
+  };
 
   useEffect(() => {
     dispatch(fetchProjectById(id));
-  }, [id]);
+  }, [id, dispatch]);
 
   useEffect(() => {
     dispatch(fetchIssues(id));
-  }, [id]);
+  }, [id, dispatch]);
 
   return (
     <div className="mt-5 px-4 lg:px-10 ">

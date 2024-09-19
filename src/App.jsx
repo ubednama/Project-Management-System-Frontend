@@ -1,4 +1,3 @@
-import './App.css'
 import Home from './pages/Home/Home'
 import NavBar from './pages/NavBar/NavBar'
 import { Routes, Route } from "react-router-dom";
@@ -29,10 +28,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/project/:id" element={<ProjectDetails />} />
-            <Route
-              path="/api/issues/:issueId"
-              element={<IssueDetails />}
-            />
+            <Route path="/api/issues/:issueId" element={<IssueDetails />}/>
             <Route path="/upgrade" element={<Subscription />} />
           </Routes>{" "}
         </div>

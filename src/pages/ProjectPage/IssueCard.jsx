@@ -22,6 +22,7 @@ import { useDispatch } from "react-redux";
 import { deleteIssueById } from "@/redux/Issue/Action";
 
 const IssueCard = ({issue, projectId}) => {
+  
   const dispatch = useDispatch();
   // const history = useHistory();
 

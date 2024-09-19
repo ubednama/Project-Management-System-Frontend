@@ -1,4 +1,4 @@
-import { useForm } from 'react-hook-form'
+import { useForm } from "react-hook-form";
 import {
   Form,
   FormField,
@@ -13,18 +13,15 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
-// import "react-datepicker/dist/react-datepicker.css";
-import { Button } from '@/components/ui/button';
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { DialogClose } from "@/components/ui/dialog";
-import { useDispatch } from 'react-redux';
-import { createIssue } from '@/redux/Issue/Action';
-import { useParams } from 'react-router-dom';
-import { priority } from '@/utils/Constants';
+import { useDispatch } from "react-redux";
+import { createIssue } from "@/redux/Issue/Action";
+import { useParams } from "react-router-dom";
+import { priority } from "@/utils/Constants";
 
-// "assignee": null
 const CreateIssueForm = () => {
-
   const { id } = useParams();
   const dispatch = useDispatch();
 
@@ -34,19 +31,24 @@ const CreateIssueForm = () => {
       description: "",
       dueDate: "",
       priority: "",
-    }
-  })
+    },
+  });
 
   const onSubmit = (data) => {
-    dispatch(
-      createIssue({
-        ...data, 
-        projectId: id,
-        status: "pending",
-      })
-    );
-    console.log("create issue", data)
-  }
+    try {
+      dispatch(
+        createIssue({
+          ...data,
+          projectId: id,
+          status: "pending",
+        })
+      );
+      console.log("Issue created successfully", data);
+    } catch (error) {
+      console.error("Failed to create issue", error);
+    }
+  };
+
   return (
     <div>
       <Form {...form}>
@@ -82,7 +84,7 @@ const CreateIssueForm = () => {
                     {...field}
                     type="text"
                     className="border w-full border-gray-700 py-5 px-5"
-                    placeholder="description"
+                    placeholder="Description"
                   />
                 </FormControl>
                 <FormMessage />
@@ -153,6 +155,6 @@ const CreateIssueForm = () => {
       </Form>
     </div>
   );
-}
+};
 
-export default CreateIssueForm
+export default CreateIssueForm;

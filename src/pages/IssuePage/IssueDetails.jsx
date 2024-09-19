@@ -22,22 +22,30 @@ import CreateCommentForm from "./CreateCommentForm";
 import CommentCard from "./CommentCard";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { fetchIssueById } from "@/redux/Issue/Action";
+import { fetchIssueById, updateIssueStatus } from "@/redux/Issue/Action";
 import { useEffect } from "react";
 
 const IssueDetails = () => {
   const dispatch = useDispatch();
-  const {id} = useParams();
+  const { issueId } = useParams();
 
-  const {issue} = useSelector((store) => store);
-  const {issueDetails} = issue
-  console.log(issue, issueDetails)
+  const { issue } = useSelector((store) => store);
+  const { issueDetails } = issue;
+
   useEffect(() => {
-    dispatch(fetchIssueById({id}))
-  }, [id])
-  const handleUpdateIssueStatus = (issue) => {
-    console.log(issue);
+    dispatch(fetchIssueById(issueId));
+  }, [issueId]);
+
+  const handleUpdateIssueStatus = (status) => {
+    dispatch(updateIssueStatus(issueId, status));
   };
+
+  const statusMapping = {
+    pending: "To Do",
+    in_progress: "In Progress",
+    done: "Done",
+  };
+
   return (
     <div className="px-20 py-8 text-gray-400">
       <div className="flex justify-between border p-10 rounded-lg ">
@@ -81,15 +89,17 @@ const IssueDetails = () => {
         <div className="w-full lg:w-1/3 space-y-2">
           <Select
             onValueChange={handleUpdateIssueStatus}
-            defaultValue="pending"
+            defaultValue={issueDetails?.status}
           >
             <SelectTrigger className="">
-              <SelectValue placeholder="To Do" />
+              <SelectValue placeholder={statusMapping[issueDetails?.status]} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="pending">To Do</SelectItem>
-              <SelectItem value="in_progress">In Progress</SelectItem>
-              <SelectItem value="done">Done</SelectItem>
+              {Object.entries(statusMapping).map(([key, value]) => (
+                <SelectItem key={key} value={key}>
+                  {value}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
           <div className="border rounded-lg">
@@ -111,7 +121,9 @@ const IssueDetails = () => {
                 </div>
                 <div className="flex gap-10 items-center">
                   <p className="w-[7rem]">Status:</p>
-                  <Badge variant="destructive">In Progress</Badge>
+                  <Badge variant="destructive">
+                    {statusMapping[issueDetails?.status]}
+                  </Badge>
                 </div>
                 <div className="flex gap-10 items-center">
                   <p className="w-[7rem]">Release:</p>

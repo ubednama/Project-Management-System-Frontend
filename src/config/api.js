@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const API_BASE_URL = "http://172.31.176.1:5454"
+export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
 
 const api = axios.create({baseURL: API_BASE_URL});
 const jwt = localStorage.getItem("jwt")
