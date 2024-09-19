@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { getUser } from './redux/Auth/Action';
 import { fetchProjects } from './redux/Project/Action';
+import ClipLoader from "react-spinners/ClipLoader";
 
 function App() {
   const dispatch = useDispatch()
@@ -20,6 +21,19 @@ function App() {
     dispatch(fetchProjects({}))
   }, [auth.jwt])
 
+  if (auth.loading) {
+    return (
+      <div className='w-full h-screen flex justify-center items-center'>
+        <ClipLoader
+        color='white'
+          size={120}
+          aria-label="Loading Spinner"
+          data-testid="loader"
+        />
+      </div>
+    );
+  }
+  
   return (
     <>
       {auth.user ? (

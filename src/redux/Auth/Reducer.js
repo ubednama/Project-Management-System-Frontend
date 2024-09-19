@@ -2,7 +2,7 @@ import * as actionTypes from "./ActionTypes"
 
 const initialState = {
     user:null,
-    loading:null,
+    loading:true,
     error:null,
     jwt:null,
     projectSize:0
