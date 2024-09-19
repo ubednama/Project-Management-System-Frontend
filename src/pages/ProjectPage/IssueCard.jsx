@@ -28,8 +28,6 @@ const IssueCard = ({issue, projectId}) => {
 
   const navigate = useNavigate();
 
-  console.log(issue);
-
   const handleDelete = () => {
     dispatch(deleteIssueById(issue.id));
   };

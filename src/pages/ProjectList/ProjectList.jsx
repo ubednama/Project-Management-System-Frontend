@@ -11,16 +11,20 @@ import { Input } from "@/components/ui/input";
 import ProjectCard from "../Project/ProjectCard";
 import { category, tags } from "../../utils/Constants";
 import { capitalizeFirstLetter } from "../../utils/Capitalize";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProjects, searchProjects } from "@/redux/Project/Action";
-import ClipLoader from "react-spinners/ClipLoader"; // Import the loading spinner
+import ClipLoader from "react-spinners/ClipLoader";
 
 const ProjectList = () => {
+  const dispatch = useDispatch();
   const [keyword, setKeyword] = useState("");
 
-  const { project } = useSelector((store) => store);
-  const dispatch = useDispatch();
+  const project = useSelector((store) => store.project);
+
+  useEffect(() => {
+      dispatch(fetchProjects({}));
+  }, []);
 
   const handleFilterCategoryChange = (value) => {
     console.log("category: ", value);
@@ -39,8 +43,6 @@ const ProjectList = () => {
     }
     dispatch(fetchProjects({ tags: value }));
   };
-
-  console.log(project);
 
   const handleSearchChange = (e) => {
     setKeyword(e.target.value);
@@ -131,6 +133,10 @@ const ProjectList = () => {
             {project.loading ? (
               <div className="w-full h-full flex justify-center items-center">
                 <ClipLoader color="white" size={40} />
+              </div>
+            ) : project.error ? (
+              <div className="w-full h-full flex justify-center items-center text-red-500">
+                Error: {project.error}
               </div>
             ) : (
               <div className="space-y-5">

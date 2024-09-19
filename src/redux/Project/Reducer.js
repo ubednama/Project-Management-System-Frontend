@@ -2,7 +2,7 @@ import * as actionTypes from "./ActionTypes";
 
 const initialState = {
     projects: [],
-    loading: false,
+    loading: true,
     error: null,
     projectDetails: null,
     searchProjects: []

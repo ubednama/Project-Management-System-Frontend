@@ -33,6 +33,13 @@ The Project Management System is a comprehensive solution designed to manage pro
 - Real-time updates and notifications
 - Integration with external services (e.g., payment gateways)
 
+## Deployment
+
+[Live Link](https://project-management-system-frontend-rho.vercel.app/)  
+
+You can check Backend Status [here](https://decoded-path-436101-q8.el.r.appspot.com/auth/status)
+The backend is deployed on Google Cloud Platform.
+
 ### Snapshots
 
 ![Screenshot 2024-07-06 103943](https://github.com/ubednama/project-management-system-frontend/assets/61332446/8083b117-78af-4c6f-a90f-74030f71b6c5)

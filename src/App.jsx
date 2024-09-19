@@ -11,10 +11,11 @@ import TermsAndConditions from "./pages/TermsAndConditions/TermsAndConditions";
 import { getUser } from "./redux/Auth/Action";
 import * as actionTypes from "./redux/Auth/ActionTypes";
 import ClipLoader from "react-spinners/ClipLoader";
+import { fetchProjects } from "./redux/Project/Action";
 
 function App() {
   const dispatch = useDispatch();
-  const { auth } = useSelector((store) => store);
+  const auth = useSelector((store) => store.auth);
 
   useEffect(() => {
     const jwt = localStorage.getItem("jwt");

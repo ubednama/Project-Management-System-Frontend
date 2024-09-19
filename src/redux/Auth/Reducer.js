@@ -4,7 +4,7 @@ const initialState = {
     user: null,
     loading: false,
     error: null,
-    jwt: localStorage.getItem("jwt"),
+    jwt: null,
     isAuthChecked: false,
     projectSize: 0
 }

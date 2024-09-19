@@ -7,7 +7,6 @@ export const createIssue = (issueData) => {
         try {
             const { data } = await api.post(`/api/issues`, issueData);
             dispatch({ type: actionTypes.CREATE_ISSUE_SUCCESS, issue: data });
-            console.log("Issue created successfully", issueData);
             dispatch(fetchIssues(issueData.projectId));
         } catch (error) {
             console.error("Error creating issue:", error);
@@ -22,7 +21,6 @@ export const fetchIssues = (id) => {
         try {
             const { data } = await api.get(`/api/issues/project/${id}`);
             dispatch({ type: actionTypes.FETCH_ISSUES_SUCCESS, issues: data });
-            console.log("all issues ", data);
         } catch (error) {
             console.log(error);
             dispatch({ type: actionTypes.FETCH_ISSUES_FAILURE, error: error.message });
