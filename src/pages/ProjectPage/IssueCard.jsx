@@ -28,6 +28,8 @@ const IssueCard = ({issue, projectId}) => {
 
   const navigate = useNavigate();
 
+  console.log(issue);
+
   const handleDelete = () => {
     dispatch(deleteIssueById(issue.id));
   };
@@ -36,7 +38,9 @@ const IssueCard = ({issue, projectId}) => {
       <CardHeader className="pb-1 py-0">
         <div className="flex justify-between items-center">
           <CardTitle
-            onClick={() => navigate(`/api/issues/${issue.id}`, {replace: true})}
+            onClick={() =>
+              navigate(`/api/issues/${issue.id}`, { replace: true })
+            }
             className="cursor-pointer"
           >
             {issue.title}
@@ -73,7 +77,7 @@ const IssueCard = ({issue, projectId}) => {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
-              <UserList />
+              <UserList issuer={issue.assignee} />
             </DropdownMenuContent>
           </DropdownMenu>
         </div>

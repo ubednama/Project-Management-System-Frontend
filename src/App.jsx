@@ -9,7 +9,6 @@ import Subscription from "./pages/Subscription/Subscription";
 import Auth from "./pages/Auth/Auth";
 import TermsAndConditions from "./pages/TermsAndConditions/TermsAndConditions";
 import { getUser } from "./redux/Auth/Action";
-import { fetchProjects } from "./redux/Project/Action";
 import * as actionTypes from "./redux/Auth/ActionTypes";
 import ClipLoader from "react-spinners/ClipLoader";
 
@@ -25,13 +24,6 @@ function App() {
       dispatch({ type: actionTypes.GET_USER_FAILURE, payload: "No JWT found" });
     }
   }, [auth.isAuthChecked]);
-
-  // useEffect(() => {
-  //   if (auth.user) {
-  //     console.log("User fetched, dispatching fetchProjects");
-  //     dispatch(fetchProjects({}));
-  //   }
-  // }, [auth.user]);
 
   if (!auth.isAuthChecked) {
     return (

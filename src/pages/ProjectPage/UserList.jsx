@@ -2,24 +2,31 @@ import {
   Avatar,
   AvatarFallback,
 } from "@/components/ui/avatar";
+import { assignIssueToUser } from "@/redux/Issue/Action";
+import { useDispatch, useSelector } from "react-redux";
 
-const UserList = () => {
+const UserList = ({issuer}) => {
+  const {project} = useSelector((store) => store);
+  const dispatch = useDispatch();
+  const handleAssignIssueToUser = (userId) => {
+    dispatch(assignIssueToUser({issueId:issuer.id, userId}));
+  }
   return (
     <div className="space-y-2">
       <div className="border-b">
-        <p className="py-2 px-3">Ubed</p>
+        <p className="py-2 px-3">{issuer.fullName}</p>
       </div>
-      {[1, 2, 3, 4].map((item) => (
+      {project.projectDetails?.team.map((item) => (
         <div
           key={item}
           className="py-1 group hover:bg-slate-800 cursor-pointer flex items-center space-x-4 rounded-md px-4"
         >
           <Avatar size="icon">
-            <AvatarFallback>Z</AvatarFallback>
+            <AvatarFallback>{item.fullName[0]}</AvatarFallback>
           </Avatar>
           <div className="">
-            <p className="text-sm leading-none">Ubed</p>
-            <p className="text-sm text-muted-foreground">@ubednama</p>
+            <p className="text-sm leading-none">{item.fullName}</p>
+            <p className="text-sm text-muted-foreground">{item.email}</p>
           </div>
         </div>
       ))}
