@@ -1,20 +1,19 @@
 import api from "@/config/api";
 import * as actionTypes from "./ActionTypes"
 
-export const fetchProjects = ({category, tags}) => {
-    return async(dispatch) => {
-        dispatch({type: actionTypes.FETCH_PROJECTS_REQUEST})
-        // const tagsString = tags.join(',');
+export const fetchProjects = ({ category, tags }) => {
+    return async (dispatch) => {
+        dispatch({ type: actionTypes.FETCH_PROJECTS_REQUEST });
         try {
-            const { data } = await api.get(`/api/projects`, { params: { category, tags }});
-            dispatch({type: actionTypes.FETCH_PROJECTS_SUCCESS, payload: data})
-            console.log("all projects ", data)
+            const { data } = await api.get(`/api/projects`, { params: { category, tags } });
+            dispatch({ type: actionTypes.FETCH_PROJECTS_SUCCESS, payload: data });
+            console.log("All projects:", data);
         } catch (error) {
             dispatch({ type: actionTypes.FETCH_PROJECTS_FAILURE, payload: error.message });
-            console.log("Error in fetchProjects",error)
+            console.log("Error in fetchProjects:", error);
         }
-    }
-}
+    };
+};
 
 export const searchProjects = (keyword) => {
     return async (dispatch) => {

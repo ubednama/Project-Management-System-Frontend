@@ -1,31 +1,43 @@
-import Home from './pages/Home/Home'
-import NavBar from './pages/NavBar/NavBar'
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Routes, Route } from "react-router-dom";
-import ProjectDetails from './pages/ProjectPage/ProjectDetails';
-import IssueDetails from './pages/IssuePage/IssueDetails';
-import Subscription from './pages/Subscription/Subscription';
-import Auth from './pages/Auth/Auth';
-import TermsAndConditions from './pages/TermsAndConditions/TermsAndConditions';
-import { useDispatch, useSelector } from 'react-redux';
-import { useEffect } from 'react';
-import { getUser } from './redux/Auth/Action';
-import { fetchProjects } from './redux/Project/Action';
+import Home from "./pages/Home/Home";
+import NavBar from "./pages/NavBar/NavBar";
+import ProjectDetails from "./pages/ProjectPage/ProjectDetails";
+import IssueDetails from "./pages/IssuePage/IssueDetails";
+import Subscription from "./pages/Subscription/Subscription";
+import Auth from "./pages/Auth/Auth";
+import TermsAndConditions from "./pages/TermsAndConditions/TermsAndConditions";
+import { getUser } from "./redux/Auth/Action";
+import { fetchProjects } from "./redux/Project/Action";
+import * as actionTypes from "./redux/Auth/ActionTypes";
 import ClipLoader from "react-spinners/ClipLoader";
 
 function App() {
-  const dispatch = useDispatch()
-  const {auth} = useSelector((store) => store)
+  const dispatch = useDispatch();
+  const { auth } = useSelector((store) => store);
 
   useEffect(() => {
-    dispatch(getUser())
-    dispatch(fetchProjects({}))
-  }, [auth.jwt])
+    const jwt = localStorage.getItem("jwt");
+    if (jwt && !auth.isAuthChecked) {
+      dispatch(getUser());
+    } else if (!jwt && !auth.isAuthChecked) {
+      dispatch({ type: actionTypes.GET_USER_FAILURE, payload: "No JWT found" });
+    }
+  }, [auth.isAuthChecked]);
 
-  if (auth.loading) {
+  // useEffect(() => {
+  //   if (auth.user) {
+  //     console.log("User fetched, dispatching fetchProjects");
+  //     dispatch(fetchProjects({}));
+  //   }
+  // }, [auth.user]);
+
+  if (!auth.isAuthChecked) {
     return (
-      <div className='w-full h-screen flex justify-center items-center'>
+      <div className="w-full h-screen flex justify-center items-center">
         <ClipLoader
-        color='white'
+          color="white"
           size={120}
           aria-label="Loading Spinner"
           data-testid="loader"
@@ -33,18 +45,18 @@ function App() {
       </div>
     );
   }
-  
+
   return (
     <>
       {auth.user ? (
-        <div className=''>
+        <div className="">
           <NavBar />
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/project/:id" element={<ProjectDetails />} />
-            <Route path="/api/issues/:issueId" element={<IssueDetails />}/>
+            <Route path="/api/issues/:issueId" element={<IssueDetails />} />
             <Route path="/upgrade" element={<Subscription />} />
-          </Routes>{" "}
+          </Routes>
         </div>
       ) : (
         <>
@@ -61,4 +73,4 @@ function App() {
   );
 }
 
-export default App
+export default App;

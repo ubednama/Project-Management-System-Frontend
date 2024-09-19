@@ -11,7 +11,6 @@ export const signup = userData => {
                 localStorage.setItem("jwt", data.jwt);
                 dispatch({type: actionTypes.SIGNUP_SUCCESS, payload:data})
             }
-            console.log(data)
         } catch (error) {
             console.log("Error in signup",error)
             dispatch({ type: actionTypes.SIGNUP_FAILURE, payload: error.message });
@@ -27,10 +26,13 @@ export const login = userData => {
             if (data.jwt) {
                 localStorage.setItem("jwt", data.jwt);
                 dispatch({ type: actionTypes.LOGIN_SUCCESS, payload: data })
+                dispatch(getUser());
+            } else {
+                dispatch({ type: actionTypes.LOGIN_FAILURE, payload: "No JWT in response" })
             }
-            console.log(data)
         } catch (error) {
             console.log("Error in login", error)
+            dispatch({ type: actionTypes.LOGIN_FAILURE, payload: error.message })
         }
     }
 }
@@ -40,13 +42,14 @@ export const getUser = () => {
         dispatch({ type: actionTypes.GET_USER_REQUEST })
         try {
             const { data } = await axios.get(`${API_BASE_URL}/api/user/profile`, {
-                headers:{
+                headers: {
                     Authorization: `Bearer ${localStorage.getItem("jwt")}`
                 }
             });
             dispatch({ type: actionTypes.GET_USER_SUCCESS, payload: data })
         } catch (error) {
             console.log("Error in getUser", error)
+            dispatch({ type: actionTypes.GET_USER_FAILURE, payload: error.message })
         }
     }
 }

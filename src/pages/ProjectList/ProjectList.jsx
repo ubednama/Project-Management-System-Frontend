@@ -14,6 +14,7 @@ import { capitalizeFirstLetter } from "../../utils/Capitalize";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProjects, searchProjects } from "@/redux/Project/Action";
+import ClipLoader from "react-spinners/ClipLoader"; // Import the loading spinner
 
 const ProjectList = () => {
   const [keyword, setKeyword] = useState("");
@@ -23,20 +24,20 @@ const ProjectList = () => {
 
   const handleFilterCategoryChange = (value) => {
     console.log("category: ", value);
-    if(value === "all"){
-      dispatch(fetchProjects({category: []}));
+    if (value === "all") {
+      dispatch(fetchProjects({ category: [] }));
       return;
     }
-    dispatch(fetchProjects({category: value}));
+    dispatch(fetchProjects({ category: value }));
   };
 
   const handleFilterTagChange = (value) => {
-    console.log("tag:" , value);
+    console.log("tag:", value);
     if (value === "all") {
-      dispatch(fetchProjects({tags: [] }));
+      dispatch(fetchProjects({ tags: [] }));
       return;
     }
-    dispatch(fetchProjects({tags: value}));
+    dispatch(fetchProjects({ tags: value }));
   };
 
   console.log(project);
@@ -65,9 +66,7 @@ const ProjectList = () => {
                   <RadioGroup
                     className="space-y-1 pt-2"
                     defaultValue="all"
-                    onValueChange={(value) =>
-                      handleFilterCategoryChange(value)
-                    }
+                    onValueChange={(value) => handleFilterCategoryChange(value)}
                   >
                     <div className="flex items-center gap-2">
                       <RadioGroupItem value="all" id="all" />
@@ -93,9 +92,7 @@ const ProjectList = () => {
                   <RadioGroup
                     className="space-y-1 pt-2"
                     defaultValue="all"
-                    onValueChange={(value) =>
-                      handleFilterTagChange(value)
-                    }
+                    onValueChange={(value) => handleFilterTagChange(value)}
                   >
                     <div className="flex items-center gap-2">
                       <RadioGroupItem value="all" id="all" />
@@ -131,15 +128,21 @@ const ProjectList = () => {
         </div>
         <div>
           <ScrollArea className="max-h-[80vh] overflow-y-auto border rounded-xl p-2">
-            <div className="space-y-5">
-              {keyword
-                ? project.searchProjects?.map((item) => (
-                    <ProjectCard key={item.id} project={item} />
-                  ))
-                : project.projects?.map((item) => (
-                    <ProjectCard key={item.id} project={item} />
-                  ))}
-            </div>
+            {project.loading ? (
+              <div className="w-full h-full flex justify-center items-center">
+                <ClipLoader color="white" size={40} />
+              </div>
+            ) : (
+              <div className="space-y-5">
+                {keyword
+                  ? project.searchProjects?.map((item) => (
+                      <ProjectCard key={item.id} project={item} />
+                    ))
+                  : project.projects?.map((item) => (
+                      <ProjectCard key={item.id} project={item} />
+                    ))}
+              </div>
+            )}
           </ScrollArea>
         </div>
       </section>

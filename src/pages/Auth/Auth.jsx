@@ -15,18 +15,17 @@ import { useDispatch } from "react-redux";
 
 const Auth = () => {
   const dispatch = useDispatch();
-  const [active, setActive] = useState(true);
+  const [active, setActive] = useState(false);
   const form = useForm({
     defaultValues: {
-      email: "",
-      password: "",
+      email: "test@test.com",
+      password: "12345678",
       fullName: "",
       confirmPassword: "",
     },
   });
 
   const onSubmit = (data) => {
-    console.log(data);
     active ? dispatch(signup(data)) : dispatch(login(data))
   };
 

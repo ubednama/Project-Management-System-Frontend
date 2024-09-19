@@ -1,11 +1,12 @@
 import * as actionTypes from "./ActionTypes"
 
 const initialState = {
-    user:null,
-    loading:true,
-    error:null,
-    jwt:null,
-    projectSize:0
+    user: null,
+    loading: false,
+    error: null,
+    jwt: localStorage.getItem("jwt"),
+    isAuthChecked: false,
+    projectSize: 0
 }
 
 export const authReducer = (state=initialState, action) => {
@@ -17,13 +18,19 @@ export const authReducer = (state=initialState, action) => {
         
         case actionTypes.SIGNUP_SUCCESS:
         case actionTypes.LOGIN_SUCCESS:
-            return {...state, loading: false, error: null, jwt: action.payload.jwt}
+            return { ...state, loading: false, error: null, jwt: action.payload.jwt, isAuthChecked: true }
         
         case actionTypes.GET_USER_SUCCESS:
-            return { ...state, loading: false, error: null, user: action.payload }
+            return { ...state, loading: false, error: null, user: action.payload, isAuthChecked: true }
+
+        case actionTypes.GET_USER_FAILURE:
+            return { ...state, loading: false, error: action.payload, isAuthChecked: true }
+        
+        case actionTypes.LOGIN_FAILURE:
+            return { ...state, loading: false, error: action.payload, isAuthChecked: true }
 
         case actionTypes.LOGOUT_SUCCESS:
-            return initialState;
+            return { ...initialState, isAuthChecked: true };
 
         default:
             return state;
